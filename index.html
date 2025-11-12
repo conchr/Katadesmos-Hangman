@@ -1,0 +1,1400 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Μάθε τα Μυστικά της ζωής στο Κάστρο Καλλιθέας</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
+        /* Βασικά στυλ */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+            color: #1f2937;
+            min-height: 100vh;
+            padding: 10px;
+            margin: 0;
+        }
+
+        @media (min-width: 768px) {
+            body {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 20px;
+            }
+        }
+
+        /* Κάρτα παιχνιδιού */
+        .card {
+            background-color: white;
+            padding: 1rem;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        @media (min-width: 768px) {
+            .card {
+                padding: 2rem;
+            }
+        }
+
+        /* Εισαγωγική σελίδα */
+        .intro-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            padding: 20px;
+        }
+
+        .intro-content {
+            text-align: center;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .intro-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        .intro-subtitle {
+            font-size: 1.3rem;
+            color: white;
+            margin-bottom: 1.2rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+        }
+
+        /* Νέο στυλ για τον υπότιτλο */
+        .intro-subtitle-small {
+            font-size: 1.1rem;
+            color: #e5e7eb;
+            margin-bottom: 1.5rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            opacity: 0;
+            transition: opacity 1.5s ease-in-out;
+            font-style: italic;
+        }
+
+        @media (min-width: 768px) {
+            .intro-title {
+                font-size: 3rem;
+            }
+            .intro-subtitle {
+                font-size: 1.5rem;
+            }
+            .intro-subtitle-small {
+                font-size: 1.3rem;
+            }
+        }
+
+        .skip-button {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            padding: 0.7rem 1.5rem;
+            background-color: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid white;
+            border-radius: 2rem;
+            cursor: pointer;
+            font-weight: bold;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .skip-button:hover {
+            background-color: white;
+            color: #667eea;
+        }
+
+        .fade-in {
+            opacity: 1 !important;
+        }
+
+        .fade-out {
+            opacity: 0 !important;
+            transition: opacity 1s ease-in-out !important;
+        }
+
+        /* Στυλ παιχνιδιού */
+        #hidden-phrase-container {
+            min-height: 120px;
+            font-family: monospace;
+            line-height: 1.8;
+            text-align: left;
+            word-spacing: 0.3em;
+            letter-spacing: 0.05em;
+            font-size: 1rem;
+            overflow-wrap: break-word;
+            word-wrap: break-word;
+        }
+
+        @media (min-width: 640px) {
+            #hidden-phrase-container {
+                font-size: 1.1rem;
+                min-height: 140px;
+            }
+        }
+
+        @media (min-width: 768px) {
+            #hidden-phrase-container {
+                font-size: 1.3rem;
+                min-height: 150px;
+                line-height: 2.2;
+            }
+        }
+
+        .phrase-char {
+            display: inline-block;
+            text-align: center;
+            cursor: default;
+            min-width: 1.1em;
+            vertical-align: top;
+        }
+
+        @media (min-width: 768px) {
+            .phrase-char {
+                min-width: 1.2em;
+            }
+        }
+
+        .phrase-dash {
+            font-weight: 700;
+            color: #3b82f6;
+            cursor: pointer;
+            transition: color 0.1s, transform 0.1s;
+            border-bottom: 1px dotted #cbd5e1;
+            width: 1.1em;
+        }
+
+        @media (min-width: 768px) {
+            .phrase-dash {
+                width: 1.2em;
+            }
+        }
+
+        .phrase-dash:hover {
+            color: #2563eb; 
+            transform: scale(1.05);
+            border-bottom: 1px solid #3b82f6;
+        }
+        
+        .space-char {
+            display: inline-block;
+            min-width: 1.2em;
+        }
+
+        @media (min-width: 768px) {
+            .space-char {
+                min-width: 1.5em;
+            }
+        }
+        
+        .letter-button {
+            padding: 6px 10px;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 1px;
+            font-size: 0.9rem;
+            min-width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        @media (min-width: 640px) {
+            .letter-button {
+                padding: 8px 12px;
+                font-size: 1rem;
+                min-width: 44px;
+                height: 44px;
+                margin: 2px;
+            }
+        }
+
+        .btn-available {
+            background-color: #4f46e5;
+            color: white;
+        }
+        .btn-available:hover {
+            background-color: #4338ca;
+        }
+        .btn-selected {
+            background-color: #f59e0b;
+            color: white;
+            box-shadow: 0 0 0 3px #fcd34d;
+        }
+        .btn-used-correct {
+            background-color: #a7f3d0;
+            color: #065f46;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        /* Νέο στυλ για λάθος τοποθετήσεις που παραμένουν ενεργά */
+        .btn-used-wrong-active {
+            background-color: #fecaca;
+            color: #991b1b;
+            border: 2px solid #fca5a5;
+        }
+        .btn-used-wrong {
+            background-color: #fca5a5;
+            color: #991b1b;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            padding: 20px;
+        }
+        
+        .collecting {
+            animation: collectPhrase 1.5s ease-in-out forwards;
+        }
+        
+        @keyframes collectPhrase {
+            0% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) scale(0.8);
+                opacity: 0;
+            }
+        }
+        
+        .solved-phrase {
+            background-color: #f0f9ff;
+            border: 2px solid #7dd3fc;
+            border-radius: 0.5rem;
+            padding: 0.75rem;
+            margin: 0.75rem 0;
+            transition: all 0.5s ease;
+            word-spacing: 0.2em;
+            line-height: 1.5;
+            font-size: 0.9rem;
+        }
+
+        @media (min-width: 768px) {
+            .solved-phrase {
+                padding: 1rem;
+                margin: 1rem 0;
+                line-height: 1.6;
+                font-size: 1rem;
+            }
+        }
+        
+        .solved-title {
+            font-weight: bold;
+            color: #0369a1;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-puzzle-space {
+            min-height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #9ca3af;
+            font-style: italic;
+            text-align: center;
+            padding: 1rem;
+        }
+
+        .no-word-break {
+            white-space: nowrap;
+        }
+
+        .selection-display-container {
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .selection-display {
+            transition: all 0.3s ease;
+        }
+
+        .selection-display.invisible {
+            visibility: hidden;
+            opacity: 0;
+        }
+
+        .selection-display.visible {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        /* Στυλ για την οθόνη τέλους */
+        .end-page-phrase {
+            background-color: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            margin: 1rem 0;
+            transition: all 0.5s ease;
+            word-spacing: 0.2em;
+            line-height: 1.6;
+            font-size: 0.9rem;
+            color: white;
+            text-align: left;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        @media (min-width: 768px) {
+            .end-page-phrase {
+                padding: 1.5rem;
+                margin: 1.5rem 0;
+                line-height: 1.7;
+                font-size: 1rem;
+            }
+        }
+        
+        .end-page-title {
+            font-weight: bold;
+            color: #fbbf24;
+            font-size: 1.1rem;
+            margin-bottom: 0.75rem;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .end-page-content {
+            color: #e5e7eb;
+            line-height: 1.6;
+        }
+
+        /* Βελτιστοποιήσεις για μικρές οθόνες */
+        @media (max-width: 380px) {
+            .letter-button {
+                padding: 4px 8px;
+                font-size: 0.8rem;
+                min-width: 36px;
+                height: 36px;
+            }
+            
+            #hidden-phrase-container {
+                font-size: 0.9rem;
+                min-height: 100px;
+            }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Νέο στυλ για υπότιτλο στην κύρια σελίδα */
+        .game-subtitle {
+            color: #6b7280;
+            font-size: 1.1rem;
+            font-style: italic;
+            margin-top: -0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        @media (min-width: 768px) {
+            .game-subtitle {
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Νέο στυλ για την οθόνη τέλους με scroll */
+        #end-page {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 2000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        #end-page .intro-content {
+            max-width: 900px;
+            width: 100%;
+            padding-bottom: 100px; /* Χώρος για το κουμπί */
+        }
+
+        #end-page .skip-button {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            z-index: 2001;
+        }
+
+        @media (max-width: 768px) {
+            #end-page .skip-button {
+                bottom: 1rem;
+                right: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Εισαγωγική Σελίδα -->
+    <div id="intro-page" class="intro-page">
+        <div class="intro-content">
+            <h1 id="intro-title-1" class="intro-title">Μάθε τα Μυστικά της ζωής στο Κάστρο Καλλιθέας</h1>
+            <p id="intro-subtitle-small-1" class="intro-subtitle-small">Μολύβδινος Κατάδεσμος</p>
+            <p id="intro-title-2" class="intro-subtitle">Ανακάλυψε τη φράση, διάλεξε πρώτα 5 γράμματα</p>
+            <p id="intro-title-3" class="intro-subtitle">Επιλέγεις πρώτα ένα γράμμα, και μετά την θέση που ταιριάζει στο κρυπτόλεξο</p>
+            <p id="intro-title-4" class="intro-subtitle">Πρόσεξε, μπορείς να κάνεις μέχρι 3 λάθη!</p>
+            <p id="intro-title-5" class="intro-subtitle">Είσαι Ετοιμος?</p>
+        </div>
+        <button id="skip-intro" class="skip-button">Skip</button>
+    </div>
+
+    <!-- Κύρια Σελίδα Παιχνιδιού -->
+    <div id="game-container" class="hidden">
+        <div class="card space-y-4 md:space-y-6">
+            <header class="text-center border-b pb-3 md:pb-4">
+                <h1 class="text-xl md:text-2xl lg:text-3xl font-extrabold text-[#4f46e5]">Μάθε τα Μυστικά της ζωής στο Κάστρο Καλλιθέας</h1>
+                <p class="game-subtitle">Μολύβδινος Κατάδεσμος</p>
+                <p class="text-gray-600 mt-1 text-sm md:text-base">Βρες τα γράμματα της κρυμμένης φράσης! Επιτρέπονται 3 λάθη.</p>
+            </header>
+
+            <!-- Error/Status Display -->
+            <div class="flex justify-between items-center p-2 md:p-3 rounded-lg bg-red-50 border border-red-200">
+                <p class="text-base md:text-lg font-semibold text-gray-700">
+                    Λάθος: <span id="incorrect-guesses" class="text-red-600 text-xl md:text-2xl font-bold">0</span> / 3
+                </p>
+                <p id="game-status" class="text-lg md:text-xl font-bold text-blue-600">Παίζεις...</p>
+            </div>
+            
+            <!-- SUBTITLE/CLUE -->
+            <p class="text-lg md:text-xl font-bold text-gray-800 border-b pb-2" id="puzzle-title">
+                <!-- Θα γεμίζει δυναμικά -->
+            </p>
+
+            <!-- Image insertion below the clue -->
+            <div class="flex justify-center p-3 md:p-4">
+                <img 
+                    src="https://raw.githubusercontent.com/conchr/Virtual-Tour/main/17MolivdinoKapaki-Katadesmos.jpg"
+                    alt="Εικόνα Μολύβδινου Καταδέσμου" 
+                    class="rounded-lg shadow-xl w-full max-w-[280px] md:max-w-xs h-auto border-4 border-gray-200 transition-all duration-300 transform hover:scale-105"
+                    onerror="this.onerror=null; this.src='https://placehold.co/300x200/4f46e5/ffffff?text=Δεν+βρέθηκε+εικόνα';"
+                >
+            </div>
+
+            <!-- Εδώ θα εμφανίζονται οι λυμένες φράσεις -->
+            <div id="solved-phrases-container">
+                <!-- Θα προστεθούν δυναμικά -->
+            </div>
+
+            <!-- Κενός χώρος που θα μείνει όταν αφαιρεθεί το κρυπτόλεξο -->
+            <div id="empty-puzzle-space" class="empty-puzzle-space hidden">
+                Το κρυπτόλεξο ολοκληρώθηκε και μεταφέρθηκε παραπάνω!
+            </div>
+
+            <!-- Game Phase Indicator -->
+            <div id="phase-indicator" class="p-2 md:p-3 rounded-lg bg-blue-100 border border-blue-300 text-center font-bold text-blue-800 text-sm md:text-base">
+                Φάση: <span id="current-phase-text"></span>
+            </div>
+
+            <!-- Letter Selection Status Container με σταθερό ύψος -->
+            <div class="selection-display-container">
+                <div id="selection-display" class="selection-display invisible p-2 md:p-3 rounded-lg bg-yellow-100 border border-yellow-300 text-center font-bold text-yellow-800 text-sm md:text-base w-full">
+                    Επιλεγμένο Γράμμα: <span id="selected-letter-text" class="text-xl md:text-2xl font-extrabold text-yellow-900">Κανένα</span>. Πατήστε ένα _ για τοποθέτηση.
+                </div>
+            </div>
+
+            <!-- Display Area -->
+            <div id="text-container" class="p-3 md:p-4 rounded-lg bg-gray-50 border border-gray-200 transition-all duration-300">
+                <div id="hidden-phrase-container" class="text-gray-900">
+                    <!-- Phrase elements will be inserted here -->
+                </div>
+            </div>
+
+            <!-- Letter Controls -->
+            <div class="space-y-3 md:space-y-4 pt-3 md:pt-4 border-t">
+                <h2 class="text-lg md:text-xl font-bold text-gray-700">Διαθέσιμα Γράμματα:</h2>
+                <div id="letter-buttons" class="flex flex-wrap gap-1 md:gap-2 justify-center p-1 md:p-2 bg-gray-100 rounded-lg shadow-inner">
+                    <!-- Letter buttons will be generated here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal for Game Over/Win -->
+        <div id="game-modal" class="modal hidden">
+            <div class="bg-white p-4 md:p-6 lg:p-8 rounded-xl shadow-2xl text-center w-full max-w-xs md:max-w-sm lg:max-w-md mx-2">
+                <h3 id="modal-title" class="text-2xl md:text-3xl font-extrabold mb-3 md:mb-4 text-[#4f46e5]"></h3>
+                <p id="modal-message" class="text-gray-700 mb-4 md:mb-6 text-base md:text-lg"></p>
+                <!-- Κουμπί για εμφάνιση φράσης στην ήττα -->
+                <button id="reveal-phrase-btn" class="px-4 py-2 md:px-6 md:py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition mb-3 md:mb-4 hidden text-sm md:text-base">
+                    Θέλεις να δεις το κρυπτόλεξο;
+                </button>
+                <div id="revealed-phrase" class="hidden mt-3 md:mt-4 p-3 md:p-4 bg-gray-100 rounded-lg">
+                    <p class="font-bold text-base md:text-lg text-gray-900"></p>
+                </div>
+                <!-- Κουμπιά για συνέχεια μετά τη νίκη -->
+                <div id="continue-buttons" class="hidden space-y-3 md:space-y-4">
+                    <p class="text-base md:text-lg font-semibold text-gray-700">Θέλεις να συνεχίσεις;</p>
+                    <div class="flex justify-center space-x-3 md:space-y-4">
+                        <button id="continue-yes" class="px-4 py-2 md:px-6 md:py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition text-sm md:text-base">Ναι</button>
+                        <button id="continue-no" class="px-4 py-2 md:px-6 md:py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition text-sm md:text-base">Όχι</button>
+                    </div>
+                </div>
+                <!-- Κουμπιά για το τρίτο επίπεδο -->
+                <div id="final-buttons" class="hidden space-y-3 md:space-y-4">
+                    <p class="text-base md:text-lg font-semibold text-gray-700">Συγχαρητήρια! Θέλεις να πάμε σε κρυπτόλεξα με διαφορετικό θέμα?</p>
+                    <div class="flex justify-center space-x-3 md:space-y-4">
+                        <button id="final-yes" class="px-4 py-2 md:px-6 md:py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition text-sm md:text-base">Ναι</button>
+                        <button id="final-no" class="px-4 py-2 md:px-6 md:py-2 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition text-sm md:text-base">Όχι</button>
+                    </div>
+                </div>
+                <!-- Κουμπιά για την ήττα -->
+                <div id="lose-buttons" class="hidden space-y-3 md:space-y-4">
+                    <p class="text-base md:text-lg font-semibold text-gray-700">Τι θέλεις να κάνεις τώρα;</p>
+                    <div class="flex flex-col space-y-2 md:space-y-3">
+                        <button id="play-same-again" class="px-4 py-2 md:px-6 md:py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition text-sm md:text-base">
+                            Παίξε Ξανά (Ίδιο Κρυπτόλεξο)
+                        </button>
+                        <button id="continue-next" class="px-4 py-2 md:px-6 md:py-2 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition text-sm md:text-base">
+                            Συνέχισε στο Επόμενο
+                        </button>
+                        <button id="show-end" class="px-4 py-2 md:px-6 md:py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition text-sm md:text-base">
+                            Τέλος Παιχνιδιού
+                        </button>
+                    </div>
+                </div>
+                <!-- Κουμπί για επανεκκίνηση -->
+                <button id="modal-button" class="px-4 py-2 md:px-6 md:py-2 bg-green-600 text-white font-semibold rounded-lg shadow-md hover:bg-green-700 transition hidden text-sm md:text-base">Παίξε Ξανά</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Οθόνη Τελικού -->
+    <div id="end-page" class="hidden">
+        <div class="intro-content">
+            <h1 id="end-title-1" class="intro-title">Μάθε τα Μυστικά της ζωής στο Κάστρο Καλλιθέας</h1>
+            <p id="end-subtitle-small-1" class="intro-subtitle-small">Μολύβδινος Κατάδεσμος</p>
+            <div id="end-phrases-container" class="w-full max-w-4xl">
+                <!-- Τα κρυπτόλεξα θα προστεθούν δυναμικά εδώ -->
+            </div>
+            <p id="end-thank-you" class="intro-subtitle mt-8">Ευχαριστούμε που έπαιξες</p>
+        </div>
+        <button id="end-play-again" class="skip-button">Παίξε Ξανά</button>
+    </div>
+
+    <script>
+        // Η ελληνική αλφάβητος (24 γράμματα)
+        const ALPHABET_GREEK = 'ΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩ';
+        const MAX_INCORRECT_GUESSES = 3;
+
+        // Τα τρία κρυπτόλεξα - Μολύβδινος Κατάδεσμος
+        const PUZZLES = [
+            {
+                id: 1,
+                title: "1. Ο Κατάδεσμος",
+                phrase: "Ο κατάδεσμος είναι ένα αρχαίο μαγικό αντικείμενο, μια κατάρα που γράφτηκε με σκοπό να δεσμεύσει, να βλάψει ή να επηρεάσει αρνητικά ένα συγκεκριμένο πρόσωπο ή αντίπαλο.",
+                image: "https://raw.githubusercontent.com/conchr/Virtual-Tour/main/17MolivdinoKapaki-Katadesmos.jpg",
+                displayTitle: "Ο Κατάδεσμος"
+            },
+            {
+                id: 2,
+                title: "2. Μαγική Επίκληση",
+                phrase: "Η πλάκα έφερε χαραγμένη μια μαγική επίκληση που απευθυνόταν σε θεότητες ή πνεύματα του Κάτω Κόσμου, ζητώντας τους να εκτελέσουν την κατάρα.",
+                image: "https://raw.githubusercontent.com/conchr/Virtual-Tour/main/17MolivdinoKapaki-Katadesmos.jpg",
+                displayTitle: "Μαγική Επίκληση"
+            },
+            {
+                id: 3,
+                title: "3. Τόπος Ταφής",
+                phrase: "Μετά τη χάραξη, ο κατάδεσμος θάβονταν σε μέρη που πιστεύονταν ότι διευκόλυναν την επαφή με τις δυνάμεις του Κάτω Κόσμου, όπως τάφοι, πηγάδια ή ιερά.",
+                image: "https://raw.githubusercontent.com/conchr/Virtual-Tour/main/17MolivdinoKapaki-Katadesmos.jpg",
+                displayTitle: "Τόπος Ταφής"
+            }
+        ];
+        
+        // --- Game State ---
+        let gameState = {};
+        let solvedPhrases = []; // Αποθηκεύει τις λυμένες φράσεις
+        let introTimeouts = []; // Για να διαχειριζόμαστε τα timeouts της intro
+
+        // --- DOM Elements ---
+        const introPage = document.getElementById('intro-page');
+        const gameContainer = document.getElementById('game-container');
+        const phraseContainer = document.getElementById('hidden-phrase-container');
+        const letterButtonsContainer = document.getElementById('letter-buttons');
+        const incorrectGuessesSpan = document.getElementById('incorrect-guesses');
+        const gameStatusElement = document.getElementById('game-status');
+        const phaseIndicator = document.getElementById('phase-indicator');
+        const currentPhaseText = document.getElementById('current-phase-text');
+        const selectionDisplay = document.getElementById('selection-display');
+        const selectedLetterText = document.getElementById('selected-letter-text');
+        const gameModal = document.getElementById('game-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const modalButton = document.getElementById('modal-button');
+        const revealPhraseBtn = document.getElementById('reveal-phrase-btn');
+        const revealedPhrase = document.getElementById('revealed-phrase');
+        const revealedPhraseText = revealedPhrase.querySelector('p');
+        const continueButtons = document.getElementById('continue-buttons');
+        const continueYes = document.getElementById('continue-yes');
+        const continueNo = document.getElementById('continue-no');
+        const finalButtons = document.getElementById('final-buttons');
+        const finalYes = document.getElementById('final-yes');
+        const finalNo = document.getElementById('final-no');
+        const puzzleTitle = document.getElementById('puzzle-title');
+        const puzzleImage = document.getElementById('puzzle-image');
+        const solvedPhrasesContainer = document.getElementById('solved-phrases-container');
+        const emptyPuzzleSpace = document.getElementById('empty-puzzle-space');
+        const skipIntroButton = document.getElementById('skip-intro');
+
+        // Νέα DOM Elements για την οθόνη τέλους
+        const endPage = document.getElementById('end-page');
+        const endPhrasesContainer = document.getElementById('end-phrases-container');
+        const endTitle1 = document.getElementById('end-title-1');
+        const endSubtitleSmall1 = document.getElementById('end-subtitle-small-1');
+        const endThankYou = document.getElementById('end-thank-you');
+        const endPlayAgain = document.getElementById('end-play-again');
+
+        // Νέα DOM Elements για τα κουμπιά στην ήττα
+        const loseButtons = document.getElementById('lose-buttons');
+        const playSameAgain = document.getElementById('play-same-again');
+        const continueNext = document.getElementById('continue-next');
+        const showEnd = document.getElementById('show-end');
+
+        // --- Intro Functions ---
+        function startIntro() {
+            const titles = [
+                'intro-title-1',
+                'intro-subtitle-small-1',
+                'intro-title-2', 
+                'intro-title-3',
+                'intro-title-4',
+                'intro-title-5'
+            ];
+
+            let delay = 0;
+            
+            titles.forEach((titleId, index) => {
+                // Fade in μετά από delay
+                introTimeouts.push(setTimeout(() => {
+                    const element = document.getElementById(titleId);
+                    element.classList.add('fade-in');
+                }, delay));
+
+                // Προσθήκη delay για το επόμενο element
+                delay += 2500;
+                
+                // Για το τελευταίο element, περιμένουμε 2sec και μετά fade out
+                if (index === titles.length - 1) {
+                    introTimeouts.push(setTimeout(() => {
+                        // Fade out όλης της intro
+                        introPage.classList.add('fade-out');
+                        
+                        // Μετά το fade out, εμφάνιση του παιχνιδιού
+                        setTimeout(() => {
+                            introPage.style.display = 'none';
+                            gameContainer.classList.remove('hidden');
+                            resetGame(0);
+                        }, 1000);
+                    }, delay + 2000));
+                }
+            });
+        }
+
+        function skipIntro() {
+            // Καθαρισμός όλων των timeouts
+            introTimeouts.forEach(timeout => clearTimeout(timeout));
+            
+            // Αμέσως fade out και μετάβαση στο παιχνίδι
+            introPage.classList.add('fade-out');
+            setTimeout(() => {
+                introPage.style.display = 'none';
+                gameContainer.classList.remove('hidden');
+                resetGame(0);
+            }, 500);
+        }
+
+        // --- Utility Functions ---
+
+        function normalizeText(text) {
+            const normalized = text.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+            return normalized.toUpperCase();
+        }
+
+        function getUniqueLetters(normalizedText) {
+            const unique = new Set();
+            for (const char of normalizedText) {
+                if (ALPHABET_GREEK.includes(char)) {
+                    unique.add(char);
+                }
+            }
+            return Array.from(unique).sort();
+        }
+
+        function addSolvedPhrase(phrase, title) {
+            const solvedPhraseDiv = document.createElement('div');
+            solvedPhraseDiv.className = 'solved-phrase';
+            solvedPhraseDiv.innerHTML = `
+                <div class="solved-title">${title}</div>
+                <div>${phrase}</div>
+            `;
+            solvedPhrasesContainer.appendChild(solvedPhraseDiv);
+            
+            solvedPhrases.push({ title, phrase });
+
+            return solvedPhraseDiv;
+        }
+
+        function scrollToElement(element) {
+            const elementRect = element.getBoundingClientRect();
+            const absoluteElementTop = elementRect.top + window.pageYOffset;
+            const middle = absoluteElementTop - (window.innerHeight / 2) + (elementRect.height / 2);
+            window.scrollTo({
+                top: middle,
+                behavior: 'smooth'
+            });
+        }
+
+        function collectPhraseAnimation() {
+            return new Promise((resolve) => {
+                const textContainer = document.getElementById('text-container');
+                textContainer.classList.add('collecting');
+                
+                setTimeout(() => {
+                    textContainer.classList.remove('collecting');
+                    
+                    textContainer.classList.add('hidden');
+                    emptyPuzzleSpace.classList.remove('hidden');
+                    
+                    const currentPuzzle = PUZZLES[gameState.currentPuzzleIndex];
+                    const solvedElement = addSolvedPhrase(currentPuzzle.phrase, currentPuzzle.displayTitle);
+                    
+                    resolve(solvedElement);
+                }, 1500);
+            });
+        }
+
+        // --- Βοηθητική Συνάρτηση για Έλεγχο Εμφανίσεων Γραμμάτων ---
+        function countLetterOccurrences(letter) {
+            let count = 0;
+            for (let i = 0; i < gameState.normalizedMessage.length; i++) {
+                if (gameState.normalizedMessage[i] === letter) {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        function countRevealedOccurrences(letter) {
+            let count = 0;
+            for (let i = 0; i < gameState.hiddenPhrase.length; i++) {
+                if (gameState.normalizedMessage[i] === letter && gameState.hiddenPhrase[i] !== '_') {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        // --- Νέα Συνάρτηση για Αποκάλυψη Τυχαίων Γραμμάτων ---
+        function revealRandomLetters(count = 10) {
+            // Βρίσκουμε όλες τις θέσεις που είναι '_' (δηλαδή κενές)
+            const emptyPositions = [];
+            for (let i = 0; i < gameState.hiddenPhrase.length; i++) {
+                if (gameState.hiddenPhrase[i] === '_' && ALPHABET_GREEK.includes(gameState.normalizedMessage[i])) {
+                    emptyPositions.push(i);
+                }
+            }
+
+            // Αν υπάρχουν λιγότερες κενές θέσεις από το count, χρησιμοποιούμε όλες
+            const positionsToReveal = emptyPositions.length <= count ? 
+                emptyPositions : 
+                shuffleArray(emptyPositions).slice(0, count);
+
+            // Αποκαλύπτουμε τα γράμματα στις επιλεγμένες θέσεις
+            let newHiddenPhrase = gameState.hiddenPhrase.split('');
+            positionsToReveal.forEach(position => {
+                newHiddenPhrase[position] = gameState.normalizedMessage[position];
+            });
+
+            gameState.hiddenPhrase = newHiddenPhrase.join('');
+
+            // Τώρα ελέγχουμε για κάθε μοναδικό γράμμα που αποκαλύφθηκε αν είναι μοναδικό στο κρυπτόλεξο
+            const revealedLetters = new Set();
+            positionsToReveal.forEach(position => {
+                const letter = gameState.normalizedMessage[position];
+                revealedLetters.add(letter);
+            });
+
+            // Για κάθε γράμμα που αποκαλύφθηκε, ελέγχουμε αν όλες οι εμφανίσεις του έχουν αποκαλυφθεί
+            revealedLetters.forEach(letter => {
+                const totalOccurrences = countLetterOccurrences(letter);
+                const revealedOccurrences = countRevealedOccurrences(letter);
+                
+                // Αν όλες οι εμφανίσεις του γράμματος έχουν αποκαλυφθεί, τότε το αφαιρούμε από τα διαθέσιμα
+                if (totalOccurrences === revealedOccurrences) {
+                    const index = gameState.wordsToGuess.indexOf(letter);
+                    if (index > -1) {
+                        gameState.wordsToGuess.splice(index, 1);
+                    }
+                    gameState.correctGuesses.add(letter);
+                }
+            });
+        }
+
+        // Βοηθητική συνάρτηση για ανακατέματo array (Fisher-Yates shuffle)
+        function shuffleArray(array) {
+            const newArray = [...array];
+            for (let i = newArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
+            }
+            return newArray;
+        }
+
+        // --- Νέα Συνάρτηση για Οθόνη Τελικού ---
+        function showEndPage() {
+            // Απόκρυψη του παιχνιδιού και εμφάνιση της οθόνης τέλους
+            gameContainer.classList.add('hidden');
+            gameModal.classList.add('hidden');
+            endPage.classList.remove('hidden');
+
+            // Scroll στην αρχή της σελίδας
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+
+            // Καθαρισμός προηγούμενου περιεχομένου
+            endPhrasesContainer.innerHTML = '';
+
+            // Προσθήκη του τίτλου και του υπότιτλου
+            endTitle1.classList.remove('fade-in');
+            endSubtitleSmall1.classList.remove('fade-in');
+            setTimeout(() => {
+                endTitle1.classList.add('fade-in');
+                endSubtitleSmall1.classList.add('fade-in');
+            }, 100);
+
+            // Προσθήκη των κρυπτόλεξων με animation
+            let delay = 800;
+            solvedPhrases.forEach((solved, index) => {
+                setTimeout(() => {
+                    const phraseDiv = document.createElement('div');
+                    phraseDiv.className = 'end-page-phrase';
+                    phraseDiv.style.opacity = '0';
+                    phraseDiv.innerHTML = `
+                        <div class="end-page-title">${solved.title}</div>
+                        <div class="end-page-content">${solved.phrase}</div>
+                    `;
+                    endPhrasesContainer.appendChild(phraseDiv);
+                    
+                    // Fade in animation
+                    setTimeout(() => {
+                        phraseDiv.style.transition = 'opacity 1s ease-in-out';
+                        phraseDiv.style.opacity = '1';
+                    }, 50);
+                }, delay);
+                delay += 800;
+            });
+
+            // Προσθήκη του μηνύματος ευχαριστιών
+            setTimeout(() => {
+                endThankYou.style.opacity = '0';
+                endThankYou.classList.remove('fade-in');
+                setTimeout(() => {
+                    endThankYou.classList.add('fade-in');
+                }, 100);
+            }, delay + 300);
+        }
+
+        // --- Core UI Rendering ---
+
+        function renderPhrase() {
+            phraseContainer.innerHTML = '';
+            const hiddenChars = gameState.hiddenPhrase.split('');
+            
+            let currentWord = [];
+            let words = [];
+            
+            for (let i = 0; i < gameState.normalizedMessage.length; i++) {
+                const char = gameState.rawMessage[i];
+                const normalizedChar = gameState.normalizedMessage[i];
+                const hiddenChar = hiddenChars[i];
+
+                if (char === ' ') {
+                    if (currentWord.length > 0) {
+                        words.push(currentWord);
+                        currentWord = [];
+                    }
+                    words.push([{ type: 'space', char: char, index: i }]);
+                } else {
+                    currentWord.push({ 
+                        type: ALPHABET_GREEK.includes(normalizedChar) ? 'letter' : 'punctuation',
+                        char: char,
+                        normalizedChar: normalizedChar,
+                        hiddenChar: hiddenChar,
+                        index: i
+                    });
+                }
+            }
+            
+            if (currentWord.length > 0) {
+                words.push(currentWord);
+            }
+            
+            words.forEach(word => {
+                if (word[0].type === 'space') {
+                    const spaceSpan = document.createElement('span');
+                    spaceSpan.className = 'space-char';
+                    spaceSpan.textContent = ' ';
+                    phraseContainer.appendChild(spaceSpan);
+                } else {
+                    const wordGroup = document.createElement('span');
+                    wordGroup.className = 'no-word-break';
+                    
+                    word.forEach(item => {
+                        const span = document.createElement('span');
+                        span.classList.add('phrase-char');
+                        span.dataset.index = item.index;
+
+                        if (item.type === 'letter') {
+                            if (item.hiddenChar === '_') {
+                                span.textContent = '_'; 
+                                span.classList.add('phrase-dash');
+                                if (gameState.phase === 'main_game' && gameState.selectedLetter) {
+                                    span.onclick = () => handlePositionSelection(item.index);
+                                } else {
+                                    span.onclick = null;
+                                }
+                            } else {
+                                span.textContent = item.char; 
+                                span.classList.add('text-gray-900', 'font-bold');
+                                span.classList.remove('phrase-dash'); 
+                                span.onclick = null;
+                            }
+                        } else {
+                            span.textContent = item.char;
+                            span.classList.add('text-gray-500', 'font-normal');
+                            span.onclick = null;
+                        }
+                        
+                        wordGroup.appendChild(span);
+                    });
+                    
+                    phraseContainer.appendChild(wordGroup);
+                    if (words.indexOf(word) < words.length - 1 && words[words.indexOf(word) + 1][0].type !== 'space') {
+                        const smallSpace = document.createElement('span');
+                        smallSpace.className = 'space-char';
+                        smallSpace.style.minWidth = '0.5em';
+                        phraseContainer.appendChild(smallSpace);
+                    }
+                }
+            });
+        }
+
+        function renderLetters() {
+            letterButtonsContainer.innerHTML = '';
+            
+            gameState.allUniqueLetters.forEach(letter => {
+                const button = document.createElement('button');
+                button.classList.add('letter-button');
+                button.textContent = letter;
+                
+                if (!gameState.gameActive) {
+                    // Game over state - όλα τα κουμπιά απενεργοποιημένα
+                    button.disabled = true;
+                    if (gameState.correctGuesses.has(letter)) {
+                        button.classList.add('btn-used-correct');
+                    } else {
+                        button.classList.add('btn-used-wrong');
+                    }
+                } else if (gameState.correctGuesses.has(letter)) {
+                    // Σωστά χρησιμοποιημένα γράμματα - απενεργοποιημένα
+                    button.disabled = true;
+                    button.classList.add('btn-used-correct');
+                } else if (gameState.wronglyPlacedLetters.has(letter)) {
+                    // Λάθος τοποθετημένα γράμματα - ενεργά αλλά με διαφορετικό χρώμα
+                    button.disabled = false;
+                    button.classList.add('btn-used-wrong-active');
+                    button.onclick = () => handleGuess(letter);
+                } else if (gameState.phase === 'main_game' && gameState.selectedLetter === letter) {
+                    // Επιλεγμένο γράμμα
+                    button.disabled = true;
+                    button.classList.add('btn-selected');
+                } else {
+                    // Διαθέσιμα γράμματα
+                    button.disabled = false;
+                    button.classList.add('btn-available');
+                    button.onclick = () => handleGuess(letter);
+                }
+                
+                letterButtonsContainer.appendChild(button);
+            });
+        }
+        
+        function renderPhaseAndSelection() {
+            phaseIndicator.classList.remove('hidden');
+            if (gameState.phase === 'initial_reveal') {
+                currentPhaseText.textContent = `Αρχική Αποκάλυψη. Επιλέξτε ${gameState.initialRevealsLeft} γράμματα. (Δεν μετρούν ως λάθη)`;
+                phaseIndicator.classList.replace('bg-yellow-100', 'bg-blue-100');
+                phaseIndicator.classList.replace('border-yellow-300', 'border-blue-300');
+                
+                // Αόρατο το selection display στην αρχική φάση
+                selectionDisplay.classList.remove('visible');
+                selectionDisplay.classList.add('invisible');
+            } else {
+                currentPhaseText.textContent = 'Κύρια Φάση Παιχνιδιού. Επιλέξτε γράμμα και θέση.';
+                phaseIndicator.classList.replace('bg-blue-100', 'bg-yellow-100');
+                phaseIndicator.classList.replace('border-blue-300', 'border-yellow-300');
+                
+                // Εμφάνιση ή απόκρυψη του selection display ανάλογα με την επιλογή γράμματος
+                if (gameState.selectedLetter) {
+                    selectionDisplay.classList.remove('invisible');
+                    selectionDisplay.classList.add('visible');
+                    selectedLetterText.textContent = gameState.selectedLetter;
+                } else {
+                    selectionDisplay.classList.remove('visible');
+                    selectionDisplay.classList.add('invisible');
+                    selectedLetterText.textContent = 'Κανένα';
+                }
+            }
+        }
+
+        function renderStatus() {
+            incorrectGuessesSpan.textContent = gameState.incorrectGuesses;
+            
+            if (!gameState.gameActive) {
+                gameStatusElement.textContent = gameState.wordsToGuess.length === 0 ? 'Νίκη!' : 'Ήττα!';
+                gameStatusElement.classList.remove('text-blue-600', 'text-red-600', 'text-yellow-600');
+                gameStatusElement.classList.add(gameState.wordsToGuess.length === 0 ? 'text-green-600' : 'text-red-600');
+            } else if (gameState.incorrectGuesses > 0) {
+                gameStatusElement.textContent = 'Προσοχή...';
+                gameStatusElement.classList.remove('text-blue-600', 'text-green-600');
+                gameStatusElement.classList.add('text-red-600');
+            } else {
+                gameStatusElement.textContent = 'Παίζεις...';
+                gameStatusElement.classList.remove('text-red-600', 'text-green-600');
+                gameStatusElement.classList.add('text-blue-600');
+            }
+        }
+
+        function showModal(isWin) {
+            // Απόκρυψη όλων των στοιχείων πρώτα
+            revealPhraseBtn.classList.add('hidden');
+            revealedPhrase.classList.add('hidden');
+            continueButtons.classList.add('hidden');
+            finalButtons.classList.add('hidden');
+            loseButtons.classList.add('hidden');
+            modalButton.classList.add('hidden');
+
+            if (isWin) {
+                modalTitle.textContent = 'Συγχαρητήρια! Νίκη!';
+                modalMessage.textContent = 'Αποκρυπτογράφησες επιτυχώς τη φράση!';
+                
+                // Καθυστέρηση 3 δευτερολέπτων για το πρώτο και δεύτερο κρυπτόλεξο
+                if (gameState.currentPuzzleIndex < 2) {
+                    setTimeout(() => {
+                        gameModal.classList.remove('hidden');
+                        gameModal.classList.add('flex');
+                        continueButtons.classList.remove('hidden');
+                    }, 3000);
+                } 
+                // Για το τρίτο κρυπτόλεξο, εμφάνιση αμέσως με το νέο μήνυμα
+                else if (gameState.currentPuzzleIndex === 2) {
+                    setTimeout(() => {
+                        gameModal.classList.remove('hidden');
+                        gameModal.classList.add('flex');
+                        finalButtons.classList.remove('hidden');
+                    }, 1000);
+                }
+                else {
+                    modalMessage.textContent += ' Ολοκλήρωσες όλα τα κρυπτόλεξα!';
+                    modalButton.classList.remove('hidden');
+                    modalButton.textContent = 'Παίξε Ξανά';
+                    modalButton.onclick = () => resetGame(0);
+                    gameModal.classList.remove('hidden');
+                    gameModal.classList.add('flex');
+                }
+            } else {
+                modalTitle.textContent = 'Τέλος Παιχνιδιού! Ήττα!';
+                modalMessage.innerHTML = `Ξεπέρασες τα ${MAX_INCORRECT_GUESSES} λάθη.`;
+                revealPhraseBtn.classList.remove('hidden');
+                loseButtons.classList.remove('hidden');
+                gameModal.classList.remove('hidden');
+                gameModal.classList.add('flex');
+            }
+        }
+
+        // --- Game Logic ---
+
+        function revealLetter(letter) {
+            let newHiddenPhrase = '';
+            let wordsToGuessUpdated = false;
+            let newWordsToGuess = [...gameState.wordsToGuess];
+
+            for (let i = 0; i < gameState.normalizedMessage.length; i++) {
+                const char = gameState.normalizedMessage[i];
+                const hiddenChar = gameState.hiddenPhrase[i];
+
+                if (char === letter) {
+                    newHiddenPhrase += char;
+                } else {
+                    newHiddenPhrase += hiddenChar;
+                }
+            }
+            
+            const index = newWordsToGuess.indexOf(letter);
+            if (index > -1) {
+                newWordsToGuess.splice(index, 1);
+                wordsToGuessUpdated = true;
+            }
+
+            gameState.hiddenPhrase = newHiddenPhrase;
+            gameState.wordsToGuess = newWordsToGuess;
+            gameState.guessedLetters.add(letter);
+            gameState.correctGuesses.add(letter);
+            gameState.wronglyPlacedLetters.delete(letter);
+            
+            return wordsToGuessUpdated;
+        }
+
+        function handleGuess(letter) {
+            if (!gameState.gameActive || gameState.guessedLetters.has(letter)) return;
+
+            if (gameState.phase === 'initial_reveal') {
+                handleInitialRevealGuess(letter);
+            } else if (gameState.phase === 'main_game') {
+                handleMainGameLetterSelection(letter);
+            }
+            renderPhrase(); 
+        }
+        
+        function handleInitialRevealGuess(letter) {
+            if (gameState.initialRevealsLeft <= 0) return;
+
+            revealLetter(letter); 
+            
+            gameState.initialRevealsLeft--;
+            
+            renderLetters();
+            renderPhaseAndSelection();
+            
+            if (gameState.initialRevealsLeft === 0) {
+                gameState.phase = 'main_game';
+                checkGameStatus(); 
+                renderPhaseAndSelection();
+            }
+        }
+
+        function handleMainGameLetterSelection(letter) {
+            if (gameState.selectedLetter === letter) {
+                gameState.selectedLetter = null;
+            } else {
+                gameState.selectedLetter = letter;
+            }
+            renderLetters();
+            renderPhaseAndSelection();
+            renderPhrase();
+        }
+
+        function handlePositionSelection(index) {
+            if (!gameState.gameActive || gameState.phase !== 'main_game' || !gameState.selectedLetter) return;
+
+            const guessedLetter = gameState.selectedLetter;
+            const actualLetter = gameState.normalizedMessage[index];
+
+            if (guessedLetter === actualLetter) {
+                revealLetter(guessedLetter);
+            } else {
+                gameState.incorrectGuesses++;
+                gameState.wronglyPlacedLetters.add(guessedLetter);
+            }
+            
+            gameState.selectedLetter = null;
+            
+            checkGameStatus();
+            renderPhrase(); 
+            renderLetters(); 
+            renderStatus();
+            renderPhaseAndSelection();
+        }
+
+        async function checkGameStatus() {
+            if (gameState.incorrectGuesses >= MAX_INCORRECT_GUESSES) {
+                gameState.gameActive = false;
+                renderPhrase();
+                setTimeout(() => showModal(false), 500);
+                return;
+            }
+            
+            if (gameState.wordsToGuess.length === 0) {
+                gameState.gameActive = false;
+                
+                const solvedElement = await collectPhraseAnimation();
+                
+                setTimeout(() => {
+                    scrollToElement(solvedElement);
+                    
+                    setTimeout(() => {
+                        showModal(true);
+                    }, 1000);
+                }, 500);
+                
+                return;
+            }
+        }
+
+        function resetGame(puzzleIndex = 0) {
+            const currentPuzzle = PUZZLES[puzzleIndex];
+            
+            const normalizedMessage = normalizeText(currentPuzzle.phrase);
+            const allUniqueLetters = getUniqueLetters(normalizedMessage);
+            
+            let initialHidden = '';
+            for (let i = 0; i < normalizedMessage.length; i++) {
+                const char = normalizedMessage[i];
+                if (ALPHABET_GREEK.includes(char)) {
+                     initialHidden += '_';
+                } else {
+                    initialHidden += currentPuzzle.phrase[i]; 
+                }
+            }
+            
+            const lettersToGuess = allUniqueLetters;
+            
+            gameState = {
+                rawMessage: currentPuzzle.phrase,
+                normalizedMessage: normalizedMessage,
+                hiddenPhrase: initialHidden,
+                allUniqueLetters: allUniqueLetters,
+                wordsToGuess: lettersToGuess, 
+                guessedLetters: new Set(), 
+                correctGuesses: new Set(),
+                wronglyPlacedLetters: new Set(),
+                incorrectGuesses: 0,
+                gameActive: true,
+                currentPuzzleIndex: puzzleIndex,
+                
+                phase: 'initial_reveal',
+                initialRevealsLeft: 5,
+                selectedLetter: null,
+            };
+
+            revealRandomLetters(10);
+            
+            puzzleTitle.textContent = currentPuzzle.title;
+            
+            const textContainer = document.getElementById('text-container');
+            textContainer.classList.remove('hidden');
+            emptyPuzzleSpace.classList.add('hidden');
+            
+            gameModal.classList.add('hidden');
+            revealPhraseBtn.classList.add('hidden');
+            revealedPhrase.classList.add('hidden');
+            continueButtons.classList.add('hidden');
+            finalButtons.classList.add('hidden');
+            loseButtons.classList.add('hidden');
+            modalButton.classList.add('hidden');
+            
+            endPage.classList.add('hidden');
+            gameContainer.classList.remove('hidden');
+            
+            renderPhrase();
+            renderLetters();
+            renderStatus();
+            renderPhaseAndSelection();
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            skipIntroButton.onclick = skipIntro;
+            
+            modalButton.onclick = () => resetGame(0);
+            
+            revealPhraseBtn.onclick = () => {
+                revealedPhraseText.textContent = gameState.rawMessage;
+                revealedPhrase.classList.remove('hidden');
+                revealPhraseBtn.classList.add('hidden');
+            };
+            
+            continueYes.onclick = () => {
+                const nextPuzzleIndex = gameState.currentPuzzleIndex + 1;
+                if (nextPuzzleIndex < PUZZLES.length) {
+                    resetGame(nextPuzzleIndex);
+                }
+            };
+            
+            continueNo.onclick = () => {
+                showEndPage();
+            };
+
+            finalYes.onclick = () => {
+                alert('Σύντομα νέα κρυπτόλεξα με διαφορετικό θέμα!');
+                resetGame(0);
+            };
+
+            finalNo.onclick = () => {
+                showEndPage();
+            };
+
+            playSameAgain.onclick = () => {
+                resetGame(gameState.currentPuzzleIndex);
+            };
+
+            continueNext.onclick = () => {
+                const nextPuzzleIndex = gameState.currentPuzzleIndex + 1;
+                if (nextPuzzleIndex < PUZZLES.length) {
+                    resetGame(nextPuzzleIndex);
+                } else {
+                    showEndPage();
+                }
+            };
+
+            showEnd.onclick = () => {
+                showEndPage();
+            };
+
+            endPlayAgain.onclick = () => {
+                resetGame(0);
+            };
+            
+            startIntro();
+        });
+    </script>
+</body>
+</html>
