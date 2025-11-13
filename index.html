@@ -470,6 +470,17 @@
                 right: 1rem;
             }
         }
+
+        /* Νέο στυλ για τα κουμπιά στην τελική σελίδα */
+        .end-page-buttons {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            z-index: 2001;
+        }
     </style>
 </head>
 <body>
@@ -597,6 +608,10 @@
                         <button id="show-end" class="px-4 py-2 md:px-6 md:py-2 bg-purple-600 text-white font-semibold rounded-lg shadow-md hover:bg-purple-700 transition text-sm md:text-base">
                             Τέλος Παιχνιδιού
                         </button>
+                        <!-- Νέο κουμπί Αρχική Σελίδα για την ήττα -->
+                        <button id="home-page-lose" class="px-4 py-2 md:px-6 md:py-2 bg-indigo-600 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 transition text-sm md:text-base">
+                            Αρχική Σελίδα
+                        </button>
                     </div>
                 </div>
                 <!-- Κουμπί για επανεκκίνηση -->
@@ -615,7 +630,11 @@
             </div>
             <p id="end-thank-you" class="intro-subtitle mt-8">Ευχαριστούμε που έπαιξες</p>
         </div>
-        <button id="end-play-again" class="skip-button">Παίξε Ξανά</button>
+        <div class="end-page-buttons">
+            <button id="end-play-again" class="skip-button">Παίξε Ξανά</button>
+            <!-- Νέο κουμπί Αρχική Σελίδα στην τελική σελίδα -->
+            <button id="home-page-end" class="skip-button">Αρχική Σελίδα</button>
+        </div>
     </div>
 
     <script>
@@ -678,7 +697,6 @@
         const finalYes = document.getElementById('final-yes');
         const finalNo = document.getElementById('final-no');
         const puzzleTitle = document.getElementById('puzzle-title');
-        const puzzleImage = document.getElementById('puzzle-image');
         const solvedPhrasesContainer = document.getElementById('solved-phrases-container');
         const emptyPuzzleSpace = document.getElementById('empty-puzzle-space');
         const skipIntroButton = document.getElementById('skip-intro');
@@ -696,6 +714,8 @@
         const playSameAgain = document.getElementById('play-same-again');
         const continueNext = document.getElementById('continue-next');
         const showEnd = document.getElementById('show-end');
+        const homePageLose = document.getElementById('home-page-lose');
+        const homePageEnd = document.getElementById('home-page-end');
 
         // --- Intro Functions ---
         function startIntro() {
@@ -1132,12 +1152,18 @@
                         continueButtons.classList.remove('hidden');
                     }, 3000);
                 } 
-                // Για το τρίτο κρυπτόλεξο, εμφάνιση αμέσως με το νέο μήνυμα
+                // Για το τελευταίο κρυπτόλεξο - εμφάνιση χωρίς κουμπιά και αυτόματη μετάβαση
                 else if (gameState.currentPuzzleIndex === 2) {
                     setTimeout(() => {
                         gameModal.classList.remove('hidden');
                         gameModal.classList.add('flex');
-                        finalButtons.classList.remove('hidden');
+                        // Δεν εμφανίζουμε κουμπιά - μόνο το μήνυμα
+                        
+                        // Μετά από 3 δευτερόλεπτα πηγαίνουμε αυτόματα στην τελική σελίδα
+                        setTimeout(() => {
+                            gameModal.classList.add('hidden');
+                            showEndPage();
+                        }, 3000);
                     }, 1000);
                 }
                 else {
@@ -1359,8 +1385,9 @@
                 }
             };
             
+            // Αλλαγή: Το "Όχι" πηγαίνει στη διεύθυνση
             continueNo.onclick = () => {
-                showEndPage();
+                window.location.href = "https://conchr.github.io/Games/";
             };
 
             finalYes.onclick = () => {
@@ -1368,8 +1395,9 @@
                 resetGame(0);
             };
 
+            // Αλλαγή: Το "Όχι" πηγαίνει στη διεύθυνση
             finalNo.onclick = () => {
-                showEndPage();
+                window.location.href = "https://conchr.github.io/Games/";
             };
 
             playSameAgain.onclick = () => {
@@ -1389,8 +1417,18 @@
                 showEndPage();
             };
 
+            // Νέο event listener για Αρχική Σελίδα στην ήττα
+            homePageLose.onclick = () => {
+                window.location.href = "https://conchr.github.io/Games/";
+            };
+
             endPlayAgain.onclick = () => {
                 resetGame(0);
+            };
+
+            // Νέο event listener για Αρχική Σελίδα στην τελική σελίδα
+            homePageEnd.onclick = () => {
+                window.location.href = "https://conchr.github.io/Games/";
             };
             
             startIntro();
